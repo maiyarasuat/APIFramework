@@ -21,6 +21,8 @@ public class RestClient {
 	//define response specs
 	
 	private ResponseSpecification responseSpec200 = expect().statusCode(200);
+	private ResponseSpecification responseSpec200or201 = expect().statusCode(anyOf(equalTo(200), equalTo(201)));
+
 	private ResponseSpecification responseSpec200or404 = expect().statusCode(anyOf(equalTo(200), equalTo(404)));
 	private ResponseSpecification responseSpec201 = expect().statusCode(201);
 	private ResponseSpecification responseSpec204 = expect().statusCode(204);
@@ -47,7 +49,7 @@ public class RestClient {
 			request.header("Authorization" , "Bearer " + ConfigManager.get("bearerToken"));
 			break;
 		case CONTACTS_BEARER_TOKEN:
-			request.header("Authorization" , "Bearer " + ConfigManager.get("bearerToken"));
+			request.header("Authorization" , "Bearer " + ConfigManager.get("contacts_bearer_token"));
 			break;	
 		case OAUTH2:
 			request.header("Authorization" , "Bearer " + generateOauth2Token());
@@ -125,7 +127,7 @@ public class RestClient {
 		
 		applyParams(request, queryParams, pathParams);
 		
-		Response response = request.body(body).post(endPoint).then().spec(responseSpec201).extract().response();
+		Response response = request.body(body).post(endPoint).then().spec(responseSpec200or201).extract().response();
 		response.prettyPrint();
 		return response;
 	}

@@ -51,4 +51,20 @@
 		</classes>
 	</test>
 
+	<test name="Contacts API Test">
+		<parameter name="baseUrl" value="https://thinking-tester-contact-list.herokuapp.com" />
+
+		<classes>
+			<class name="com.qa.contacts.api.tests.ContactsAPITest" />
+		</classes>
+	</test>
+	
+	<test name="Products API Test">
+		<parameter name="baseUrl" value="https://fakestoreapi.com/" />
+
+		<classes>
+			<class name="com.qa.products.api.test.ProductsApiTest" />
+		</classes>
+	</test>
+
 </suite>	
