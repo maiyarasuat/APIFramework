@@ -17,7 +17,7 @@ public class ProductsApiTest extends BaseTest{
 	@Test
 	public void getProductApiTest() {
 		
-		Response response = restClient.get("/products", null, null, AuthType.NO_AUTH, ContentType.JSON);
+		Response response = restClient.get(BASE_URL_PRODUCT, "/products", null, null, AuthType.NO_AUTH, ContentType.JSON);
 		Assert.assertEquals(response.statusCode(), 200);
 		
 	}
@@ -27,7 +27,7 @@ public class ProductsApiTest extends BaseTest{
 	public void getProductLimitTest() {
 		
 		Map<String, String> queryParams = Map.of("limit","5");
-		Response response = restClient.get("/products", queryParams, null, AuthType.NO_AUTH, ContentType.JSON);
+		Response response = restClient.get(BASE_URL_PRODUCT, "/products", queryParams, null, AuthType.NO_AUTH, ContentType.JSON);
 		Assert.assertEquals(response.statusCode(), 200);
 	}
 

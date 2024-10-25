@@ -22,14 +22,14 @@ public class GetUserTest extends BaseTest {
 		queryParams.put("name", "Maiyarasu");
 		queryParams.put("status", "inactive");
 		
-		Response response = restClient.get("/public/v2/users", queryParams, null, AuthType.BEARER_TOKEN, ContentType.JSON);
+		Response response = restClient.get(BASE_URL_GOREST,"/public/v2/users", queryParams, null, AuthType.BEARER_TOKEN, ContentType.JSON);
 		Assert.assertEquals(response.getStatusCode(), 200);
 	}
 	
 	@Test
 	public void getSingleUsersTest() {
 		
-		Response response = restClient.get("/public/v2/users/7484508", null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
+		Response response = restClient.get(BASE_URL_GOREST,"/public/v2/users/7484508", null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
 		Assert.assertEquals(response.getStatusCode(), 200);
 	}
 

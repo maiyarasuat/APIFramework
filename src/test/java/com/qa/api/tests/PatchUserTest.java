@@ -24,7 +24,7 @@ public class PatchUserTest extends BaseTest{
 				.status("active")
 				.build();
 		
-		Response response = restClient.post("/public/v2/users", user , null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
+		Response response = restClient.post(BASE_URL_GOREST,"/public/v2/users", user , null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
 		Assert.assertEquals(response.getStatusCode(), 201);
 
 		//FETCH userid
@@ -33,7 +33,7 @@ public class PatchUserTest extends BaseTest{
 		System.out.println("user is====>" +userID);
 		
 		//2. GET fetch the same user using the user id
-		Response ResponseGET = restClient.get("/public/v2/users/"+userID, null, null,AuthType.BEARER_TOKEN, ContentType.JSON);
+		Response ResponseGET = restClient.get(BASE_URL_GOREST,"/public/v2/users/"+userID, null, null,AuthType.BEARER_TOKEN, ContentType.JSON);
 		Assert.assertEquals(ResponseGET.statusCode(), 200);
 		Assert.assertEquals(ResponseGET.jsonPath().getString("id"), userID);
 		
@@ -41,7 +41,7 @@ public class PatchUserTest extends BaseTest{
 		user.setEmail(StringUtil.getRandomEmailID());
 		
 		//3. PATCH the same user using the same user id
-		Response ResponsePATCH = restClient.patch("/public/v2/users/"+userID, user , null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
+		Response ResponsePATCH = restClient.patch(BASE_URL_GOREST,"/public/v2/users/"+userID, user , null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
 		Assert.assertEquals(ResponsePATCH.getStatusCode(), 200);
 		Assert.assertEquals(ResponsePATCH.jsonPath().getString("id"), userID);
 		Assert.assertEquals(ResponsePATCH.jsonPath().getString("email"), user.getEmail());		

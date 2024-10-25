@@ -20,7 +20,7 @@ public class CreateUserTest extends BaseTest{
 		
 		User user = new User(null, "john", StringUtil.getRandomEmailID(), "male", "active");
 		
-		Response response = restClient.post("/public/v2/users", user , null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
+		Response response = restClient.post(BASE_URL_GOREST,"/public/v2/users", user , null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
 		Assert.assertEquals(response.getStatusCode(), 201);
 	}
 	
@@ -35,7 +35,7 @@ public class CreateUserTest extends BaseTest{
 				.status("active")
 				.build();
 		
-		Response response = restClient.post("/public/v2/users", user , null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
+		Response response = restClient.post(BASE_URL_GOREST, "/public/v2/users", user , null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
 		Assert.assertEquals(response.getStatusCode(), 201);
 
 		//FETCH
@@ -44,7 +44,7 @@ public class CreateUserTest extends BaseTest{
 		System.out.println("user is====>" +userID);
 		
 		//GET
-		Response getResponse = restClient.get("/public/v2/users/"+userID, null, null,AuthType.BEARER_TOKEN, ContentType.JSON);
+		Response getResponse = restClient.get(BASE_URL_GOREST, "/public/v2/users/"+userID, null, null,AuthType.BEARER_TOKEN, ContentType.JSON);
 		Assert.assertEquals(getResponse.statusCode(), 200);
 		Assert.assertEquals(getResponse.jsonPath().getString("id"), userID);
 		Assert.assertEquals(getResponse.jsonPath().getString("name"), user.getName());
@@ -56,7 +56,7 @@ public class CreateUserTest extends BaseTest{
 		
 		File userJsonFile = new File("./src/test/resources/jsons/user.json");
 		
-		Response response = restClient.post("/public/v2/users", userJsonFile , null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
+		Response response = restClient.post(BASE_URL_GOREST,"/public/v2/users", userJsonFile , null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
 		Assert.assertEquals(response.getStatusCode(), 201);
 	}
 

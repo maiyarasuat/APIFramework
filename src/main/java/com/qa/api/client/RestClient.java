@@ -4,6 +4,7 @@ import static io.restassured.RestAssured.expect;
 import static org.hamcrest.Matchers.*;
 
 import java.io.File;
+import java.util.Base64;
 import java.util.Map;
 
 import com.qa.api.constants.AuthType;
@@ -34,9 +35,9 @@ public class RestClient {
 
 
 
-	private String baseUrl = ConfigManager.get("baseUrl");
+	//private String baseUrl = ConfigManager.get("baseUrl");
 	
-	private RequestSpecification setupRequest(AuthType authType, ContentType contentType) {
+	private RequestSpecification setupRequest(String baseUrl, AuthType authType, ContentType contentType) {
 		
 		RequestSpecification request = RestAssured.given().log().all()
 										.baseUri(baseUrl)
@@ -55,7 +56,7 @@ public class RestClient {
 			request.header("Authorization" , "Bearer " + generateOauth2Token());
 			break;
 		case BASIC_AUTH:
-			request.header("Authorization" , "Basic " );
+			request.header("Authorization" , "Basic " + generateBasicAuthToken());
 			break;
 		case API_KEY:
 			request.header("x-api-key" , ConfigManager.get("apiKey"));
@@ -69,6 +70,16 @@ public class RestClient {
 			throw new FrameworkException("NO AUTH SUPPORTED");
 		}
 		return request;	
+	}
+	
+	/**
+	 * this method is used to generate base64 encoded auth
+	 * @return
+	 */
+	private String generateBasicAuthToken() {
+		
+		String creds = ConfigManager.get("basicUsername")+ ":" + ConfigManager.get("basicPassword");//admin:admin
+		return Base64.getEncoder().encodeToString(creds.getBytes());
 	}
 	
 	public String generateOauth2Token() {
@@ -94,11 +105,11 @@ public class RestClient {
 	 * @param contentType
 	 * @return it returns the API response
 	 */
-	public Response get(String endPoint, Map<String, String> queryParams,
+	public Response get(String baseUrl,String endPoint, Map<String, String> queryParams,
 									Map<String, String> pathParams,
 									AuthType authType, ContentType contentType) {
 		
-		RequestSpecification request = setUpAuthandContentType(authType, contentType);
+		RequestSpecification request = setUpAuthandContentType(baseUrl,authType, contentType);
 		
 		applyParams(request, queryParams, pathParams);
 
@@ -118,12 +129,12 @@ public class RestClient {
 	 * @param contentType
 	 * @return it returns the API response
 	 */
-	public <T>Response post(String endPoint, T body, Map<String, String> queryParams,
+	public <T>Response post(String baseUrl,String endPoint, T body, Map<String, String> queryParams,
 											  Map<String, String> pathParams,
 											  AuthType authType, ContentType contentType) {
 		
 		
-		RequestSpecification request = setUpAuthandContentType(authType, contentType);
+		RequestSpecification request = setUpAuthandContentType(baseUrl,authType, contentType);
 		
 		applyParams(request, queryParams, pathParams);
 		
@@ -142,12 +153,12 @@ public class RestClient {
 	 * @param contentType
 	 * @return it will return post api response
 	 */
-	public Response post(String endPoint, File file, Map<String, String> queryParams,
+	public Response post(String baseUrl, String endPoint, File file, Map<String, String> queryParams,
 			  Map<String, String> pathParams,
 			  AuthType authType, ContentType contentType) {
 
 
-		RequestSpecification request = setUpAuthandContentType(authType, contentType);
+		RequestSpecification request = setUpAuthandContentType(baseUrl,authType, contentType);
 
 		applyParams(request, queryParams, pathParams);
 		
@@ -156,12 +167,12 @@ public class RestClient {
 		return response;
 }
 		
-	public <T>Response put(String endPoint, T body, Map<String, String> queryParams,
+	public <T>Response put(String baseUrl, String endPoint, T body, Map<String, String> queryParams,
 			  Map<String, String> pathParams,
 			  AuthType authType, ContentType contentType) {
 
 
-		RequestSpecification request = setUpAuthandContentType(authType, contentType);
+		RequestSpecification request = setUpAuthandContentType(baseUrl,authType, contentType);
 
 		applyParams(request, queryParams, pathParams);
 		
@@ -170,12 +181,12 @@ public class RestClient {
 		return response;
 }
 	
-	public <T>Response patch(String endPoint, T body, Map<String, String> queryParams,
+	public <T>Response patch(String baseUrl, String endPoint, T body, Map<String, String> queryParams,
 			  Map<String, String> pathParams,
 			  AuthType authType, ContentType contentType) {
 
 
-		RequestSpecification request = setUpAuthandContentType(authType, contentType);
+		RequestSpecification request = setUpAuthandContentType(baseUrl,authType, contentType);
 
 		applyParams(request, queryParams, pathParams);
 		
@@ -184,12 +195,12 @@ public class RestClient {
 		return response;
 }
 	
-	public <T>Response delete(String endPoint, Map<String, String> queryParams,
+	public <T>Response delete(String baseUrl, String endPoint, Map<String, String> queryParams,
 			  Map<String, String> pathParams,
 			  AuthType authType, ContentType contentType) {
 
 
-		RequestSpecification request = setUpAuthandContentType(authType, contentType);
+		RequestSpecification request = setUpAuthandContentType(baseUrl,authType, contentType);
 
 		applyParams(request, queryParams, pathParams);
 		
@@ -208,9 +219,9 @@ public class RestClient {
 		
 	}
 
-	private RequestSpecification setUpAuthandContentType(AuthType authType, ContentType contentType) {
+	private RequestSpecification setUpAuthandContentType(String baseUrl, AuthType authType, ContentType contentType) {
 		
-		return setupRequest(authType, contentType);
+		return setupRequest(baseUrl,authType, contentType);
 
 	}
 

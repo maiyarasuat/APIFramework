@@ -23,7 +23,7 @@ public class DeleteUserTest extends BaseTest {
 				.status("active")
 				.build();
 		
-		Response response = restClient.post("/public/v2/users", user , null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
+		Response response = restClient.post(BASE_URL_GOREST,"/public/v2/users", user , null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
 		Assert.assertEquals(response.getStatusCode(), 201);
 
 		//FETCH userid
@@ -32,17 +32,17 @@ public class DeleteUserTest extends BaseTest {
 		System.out.println("user is====>" +userID);
 		
 		//2. GET fetch the same user using the user id
-		Response ResponseGET = restClient.get("/public/v2/users/"+userID, null, null,AuthType.BEARER_TOKEN, ContentType.JSON);
+		Response ResponseGET = restClient.get(BASE_URL_GOREST,"/public/v2/users/"+userID, null, null,AuthType.BEARER_TOKEN, ContentType.JSON);
 		Assert.assertEquals(ResponseGET.statusCode(), 200);
 		Assert.assertEquals(ResponseGET.jsonPath().getString("id"), userID);
 		
 		
 		//3. DELETE the same user using the same user id
-		Response ResponseDelete = restClient.delete("/public/v2/users/"+userID, null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
+		Response ResponseDelete = restClient.delete(BASE_URL_GOREST,"/public/v2/users/"+userID, null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
 		Assert.assertEquals(ResponseDelete.getStatusCode(), 204);
 		
 		//4. Recheck and fetch the user with the same user id
-		Response ResponseGETAfterDelete = restClient.get("/public/v2/users/"+userID, null, null,AuthType.BEARER_TOKEN, ContentType.JSON);
+		Response ResponseGETAfterDelete = restClient.get(BASE_URL_GOREST,"/public/v2/users/"+userID, null, null,AuthType.BEARER_TOKEN, ContentType.JSON);
 		Assert.assertEquals(ResponseGETAfterDelete.statusCode(), 404);
 		Assert.assertEquals(ResponseGETAfterDelete.jsonPath().getString("message"), "Resource not found");
 		
