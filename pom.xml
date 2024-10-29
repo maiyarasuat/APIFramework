@@ -51,6 +51,13 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.wiremock</groupId>
+			<artifactId>wiremock</artifactId>
+			<version>3.9.2</version>
+		</dependency>
+
+
+		<dependency>
 			<groupId>io.qameta.allure</groupId>
 			<artifactId>allure-rest-assured</artifactId>
 			<version>2.29.0</version>
