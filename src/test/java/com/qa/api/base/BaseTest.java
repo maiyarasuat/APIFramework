@@ -1,9 +1,11 @@
 package com.qa.api.base;
 
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.BeforeTest;
 
 import com.qa.api.client.RestClient;
+import com.qa.api.mocking.WireMockSetup;
 
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
@@ -17,6 +19,7 @@ public class BaseTest {
 	protected final static String BASE_URL_CONTACTS = "https://thinking-tester-contact-list.herokuapp.com";
 	protected final static String BASE_URL_BASIC_AUTH = "https://the-internet.herokuapp.com";
 	protected final static String BASE_URL_AMADEUS = "https://test.api.amadeus.com";
+	protected final static String BASE_URL_LOCAL_HOST = "http://localhost:8089";
 	
 	// ***********AppEndpoints**************
 	protected static final String GOREST_USERS_ALL_ENDPOINT = "/public/v2/users";
@@ -40,6 +43,12 @@ public class BaseTest {
 		
 		RestAssured.filters(new AllureRestAssured());
 		restClient = new RestClient();
+		WireMockSetup.createMockServer();
+	}
+	
+	@AfterTest
+	public void stopMockServer() {
+		WireMockSetup.stopMockServer();
 	}
 
 }
