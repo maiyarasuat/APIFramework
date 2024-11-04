@@ -37,7 +37,7 @@ public class APIMocks {
 	
 	public static void getDummyUserWithQueryParams() {
 		stubFor(get(urlPathEqualTo("/api/users"))
-				.withQueryParam("name",equalTo("naveen"))
+				.withQueryParam("name", equalTo("Tom"))
 				.willReturn(aResponse()
 						.withStatus(200)
 						.withHeader("content-type", "application/json")

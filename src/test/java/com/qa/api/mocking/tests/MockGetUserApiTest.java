@@ -2,6 +2,8 @@ package com.qa.api.mocking.tests;
 
 import static org.hamcrest.Matchers.equalTo;
 
+import java.util.Map;
+
 import org.testng.annotations.Test;
 
 import com.qa.api.base.BaseTest;
@@ -24,6 +26,23 @@ public class MockGetUserApiTest extends BaseTest{
 					.assertThat()
 						.statusCode(200)
 							.body("name",equalTo("Tom"));
+		
+		
+	}
+	
+	@Test
+	public void getDummyUserWithQueryParamTest() {
+		
+		APIMocks.getDummyUserWithQueryParams();
+		
+		Map<String, String> queryParams = Map.of("name" , "Tom");
+		
+		Response response = restClient.get(BASE_URL_LOCAL_HOST, "/api/users", queryParams, null, AuthType.NO_AUTH, ContentType.ANY);
+		
+		response.then()
+					.assertThat()
+						.statusCode(200)
+							.body("name", equalTo("api"));
 		
 		
 	}
