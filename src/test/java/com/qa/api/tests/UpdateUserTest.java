@@ -1,6 +1,7 @@
 package com.qa.api.tests;
 
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.qa.api.base.BaseTest;
@@ -13,15 +14,26 @@ import io.restassured.response.Response;
 
 public class UpdateUserTest extends BaseTest{
 	
-	@Test
-	public void updateUsersWithBuilderTest() {
+	@DataProvider
+	public Object[][] getUserData() {
+		
+		return new Object[][] {
+			
+			{"naveen", "male", "inactive", "active", "naveenAutomation"},
+			{"kanchan", "male", "active", "inactive", "kanchanapiautomation"},
+		};
+		
+	}
+	
+	@Test(dataProvider = "getUserData")
+	public void updateUsersWithBuilderTest(String name, String gender, String status, String updatedStatus, String updatedName) {
 		
 		//1. POST: create a user
 		User user = User.builder()
-				.name("apiname")
+				.name(name)
 				.email(StringUtil.getRandomEmailID())
-				.gender("male")
-				.status("active")
+				.gender(gender)
+				.status(status)
 				.build();
 		
 		Response response = restClient.post(BASE_URL_GOREST,"/public/v2/users", user , null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
@@ -38,8 +50,8 @@ public class UpdateUserTest extends BaseTest{
 		Assert.assertEquals(ResponseGET.jsonPath().getString("id"), userID);
 		
 		//update the user details using the setter
-		user.setGender("female");
-		user.setStatus("inactive");
+		user.setStatus(updatedStatus);
+		user.setName(updatedName);
 		
 		//3. update the same user using the same user id
 		Response ResponsePUT = restClient.put(BASE_URL_GOREST,"/public/v2/users/"+userID, user , null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
@@ -50,9 +62,4 @@ public class UpdateUserTest extends BaseTest{
 		
 		
 }
-	
-	
-	
-	
-
 }
