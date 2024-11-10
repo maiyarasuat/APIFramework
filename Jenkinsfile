@@ -5,13 +5,6 @@ pipeline
     tools{
     	maven 'maven'
         }
-        
-    environment{
-   
-        BUILD_NUMBER = "${BUILD_NUMBER}"
-   
-    }
-    
 
     stages 
     {
@@ -31,7 +24,7 @@ pipeline
                 }
             }
         }
-
+        
         
         
         stage("Deploy to QA"){
@@ -39,50 +32,18 @@ pipeline
                 echo("deploy to qa done")
             }
         }
-             
-             
                 
-                
-      stage('Run Docker Image with Regression Tests') {
-    steps {
-        script {
-            def suiteXmlFilePath = 'src/test/resources/testrunners/testng_regression.xml'
-            def dockerCommand = """
-                docker run --name apitesting${BUILD_NUMBER} \
-                -v "${WORKSPACE}/reports:/app/reports" \
-                naveenkhunteta/apiregressiontest:latest \
-                /bin/bash -c "mvn test -Dsurefire.suiteXmlFiles=${suiteXmlFilePath}"
-            """
-            
-            def exitCode = sh(script: dockerCommand, returnStatus: true)
-            
-            if (exitCode != 0) {
-                currentBuild.result = 'FAILURE'
-            }
-            sh "docker start apitesting${BUILD_NUMBER}"
-            sh "docker cp apitesting${BUILD_NUMBER}:/app/reports/TestExecutionReport.html ${WORKSPACE}/reports"
-            sh "docker cp apitesting${BUILD_NUMBER}:/app/allure-results ${WORKSPACE}/allure-results"
-            sh "docker rm -f apitesting${BUILD_NUMBER}"
-        }
-    }
-}
-
-
-
-		
-		stage('Publish Regression Extent Report'){
-            steps{
-                     publishHTML([allowMissing: false,
-                                  alwaysLinkToLastBuild: false, 
-                                  keepAll: false, 
-                                  reportDir: 'reports', 
-                                  reportFiles: 'TestExecutionReport.html', 
-                                  reportName: 'API HTML Regression Extent Report', 
-                                  reportTitles: ''])
+        stage('Run Regression API Automation Test') {
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    git 'https://github.com/maiyarasuat/APIFramework.git'
+                    sh "mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_regression.xml"
+                    
+                }
             }
         }
-        
-        
+                
+     
         stage('Publish Allure Reports') {
            steps {
                 script {
@@ -97,8 +58,54 @@ pipeline
             }
         }
         
-         
-
-         
+        
+        stage('Publish Regresion Extent Report'){
+            steps{
+                     publishHTML([allowMissing: false,
+                                  alwaysLinkToLastBuild: false, 
+                                  keepAll: false, 
+                                  reportDir: 'reports', 
+                                  reportFiles: 'TestExecutionReport.html', 
+                                  reportName: 'API HTML Regression Extent Report', 
+                                  reportTitles: ''])
+            }
+        }
+        
+        
+         stage("Deploy to STAGE"){
+            steps{
+                echo("deploy to STAGE done")
+            }
+        }
+        
+        stage('Run Sanity API Automation Test') {
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    git 'https://github.com/maiyarasuat/APIFramework.git'
+                    sh "mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_sanity.xml"
+                    
+                }
+            }
+        }
+        
+        
+         stage('Publish Sanity Extent Report'){
+            steps{
+                     publishHTML([allowMissing: false,
+                                  alwaysLinkToLastBuild: false, 
+                                  keepAll: false, 
+                                  reportDir: 'reports', 
+                                  reportFiles: 'TestExecutionReport.html', 
+                                  reportName: 'API HTML Sanity Extent Report', 
+                                  reportTitles: ''])
+            }
+        }
+        
+        
+        stage("Deploy to PROD"){
+            steps{
+                echo("deploy to PROD")
+            }
+        }
     }
 }
