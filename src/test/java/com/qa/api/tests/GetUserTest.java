@@ -29,7 +29,7 @@ public class GetUserTest extends BaseTest {
 	@Test
 	public void getSingleUsersTest() {
 		
-		Response response = restClient.get(BASE_URL_GOREST,"/public/v2/users/7484508", null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
+		Response response = restClient.get(BASE_URL_GOREST,"/public/v2/users/7516306", null, null, AuthType.BEARER_TOKEN, ContentType.JSON);
 		Assert.assertEquals(response.getStatusCode(), 200);
 	}
 

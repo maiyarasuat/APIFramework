@@ -47,15 +47,7 @@ public class UserApiTestWithDynamicJsonTest extends BaseTest{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
+			
 		
 	}
 
