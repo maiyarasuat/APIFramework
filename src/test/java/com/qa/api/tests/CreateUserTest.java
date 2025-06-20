@@ -16,6 +16,19 @@ import io.restassured.response.Response;
 
 public class CreateUserTest extends BaseTest{
 	
+//	@DataProvider
+//	public Object[][] getUserTestData() {
+//		
+//		return new Object[][] {
+//			
+//			{"naveen","male","active"},
+//			{"elisa","female","inactive"},
+//			{"veena","female","active"},
+//			{"demi","female","active"},
+//			
+//		};
+//	}
+	
 	@DataProvider
 	public Object[][] getUserData() {
 		
