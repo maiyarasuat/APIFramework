@@ -12,7 +12,7 @@ public class ConfigManager {
 
 		try (InputStream input = ConfigManager.class.getClassLoader().getResourceAsStream("config/config.properties")) {
 
-			if (input!=null) {
+			if (input !=null) {
 				properties.load(input);
 			}
 		} catch (IOException e) {

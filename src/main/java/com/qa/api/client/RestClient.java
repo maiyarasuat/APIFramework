@@ -227,6 +227,4 @@ public class RestClient {
 		return setupRequest(baseUrl,authType, contentType);
 
 	}
-
-
 }
