@@ -14,6 +14,12 @@ public class JsonPathValidator {
 		return response.getBody().asString();
 	}
 	
+	public static <T> T read(Response response, String jsonPath) {
+		String jsonResponse = getJsonResponseAsString(response);
+		ReadContext ctx =  JsonPath.parse(jsonResponse);
+		return ctx.read(jsonPath);
+	}
+	
 	public static <T> List<T> readList(Response response, String jsonPath) {
 		String jsonResponse = getJsonResponseAsString(response);
 		ReadContext ctx =  JsonPath.parse(jsonResponse);

@@ -28,6 +28,8 @@ public class ProductApiTestWithJsonPath extends BaseTest{
 		System.out.println(rates);
 		System.out.println("------------");
 
+		
+		//get map
 		List<Map<String,Object>> jeweleryList = JsonPathValidator.readListofMap(response, "$.[?(@.category=='jewelery')].['title','price','id']");
 		System.out.println(jeweleryList.size());
 		System.out.println("-----------------");
@@ -39,10 +41,17 @@ public class ProductApiTestWithJsonPath extends BaseTest{
 			System.out.println("price:"+ " "+ price);
 			System.out.println("title:"+ " " + title);
 			System.out.println("id:"+ " " +id);
-			System.out.println("--------------");
 			
-
 		}	
+		
+		System.out.println("================");
+		//get single data
+		
+		Double minPrice =JsonPathValidator.read(response, "min($[*].price)");
+		
+		System.out.println("minimum price is:" + minPrice);
+		
+		
 	}
 
 }
