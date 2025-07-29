@@ -31,12 +31,5 @@ public class UserAPISchemaTest extends BaseTest{
 		
 		Response responseGET = restClient.get(BASE_URL_GOREST, "/public/v2/users/"+userId, null, null, AuthType.BEARER_TOKEN, ContentType.ANY);
 		Assert.assertEquals(SchemaValidator.validateSchema(responseGET, "schema/user-schema.json"), true);
-		
-		
-		
-		
-		
-		
-		
 	}
 }
